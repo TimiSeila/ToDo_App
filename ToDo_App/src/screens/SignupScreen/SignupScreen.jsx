@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import {
   StyleSheet,
   Text,
@@ -12,17 +13,31 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { auth } from "../../../config/firebase";
 
 export const SignupScreen = () => {
   const [fname, setFname] = useState(null);
   const [lname, setLname] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [registering, setRegistering] = useState(false);
 
   const navigation = useNavigation();
 
-  const handleSignup = () => {
-    navigation.navigate("Home");
+  const handleSignup = async () => {
+    try {
+      Keyboard.dismiss();
+      setRegistering(true);
+      await createUserWithEmailAndPassword(auth, email, password);
+
+      const fullName = fname + " " + lname;
+      await updateProfile(auth.currentUser, {
+        displayName: fullName,
+      });
+      navigation.navigate("Home");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -71,7 +86,9 @@ export const SignupScreen = () => {
         </KeyboardAvoidingView>
         <View style={styles.signupBtnContainer}>
           <TouchableOpacity style={styles.signupBtn} onPress={handleSignup}>
-            <Text style={styles.signupText}>Sign Up</Text>
+            <Text style={styles.signupText}>
+              {registering ? "Registering..." : "Sign Up"}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

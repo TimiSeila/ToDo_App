@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import {
   StyleSheet,
@@ -12,15 +13,24 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { auth } from "../../../config/firebase";
 
 export const LoginScreen = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [logging, setLogging] = useState(false);
 
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    navigation.navigate("Home");
+  const handleLogin = async () => {
+    try {
+      Keyboard.dismiss();
+      setLogging(true);
+      await signInWithEmailAndPassword(auth, email, password);
+      navigation.navigate("Home");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -55,7 +65,9 @@ export const LoginScreen = () => {
         </KeyboardAvoidingView>
         <View style={styles.loginBtnContainer}>
           <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginText}>Log In</Text>
+            <Text style={styles.loginText}>
+              {logging ? "Logging In..." : "Log In"}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

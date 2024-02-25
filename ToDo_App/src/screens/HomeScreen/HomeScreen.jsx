@@ -1,11 +1,31 @@
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
+import { auth } from "../../../config/firebase";
+import { signOut } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
 
 export const HomeScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerLogo}>ToDo</Text>
       </View>
+      <Text>Hello {auth.currentUser.displayName}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          signOut(auth);
+          navigation.navigate("Welcome");
+        }}
+      >
+        <Text>Sign Out</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
