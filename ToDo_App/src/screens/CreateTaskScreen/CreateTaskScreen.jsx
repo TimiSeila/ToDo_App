@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,7 +12,38 @@ import {
   Platform,
 } from "react-native";
 
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "../../../config/firebase";
+import { useNavigation } from "@react-navigation/native";
+
 export const CreateTaskScreen = () => {
+  const [taskName, setTaskName] = useState(null);
+  const [creating, setCreating] = useState(false);
+
+  const navigation = useNavigation();
+
+  const handleTaskCreate = async () => {
+    if (taskName) {
+      try {
+        Keyboard.dismiss();
+        setCreating(true);
+        const collectionRef = collection(db, "tasks");
+
+        await addDoc(collectionRef, {
+          uid: auth.currentUser.uid,
+          taskName,
+          createdAt: serverTimestamp(),
+        });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setCreating(false);
+        setTaskName(null);
+        navigation.navigate("home");
+      }
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
@@ -29,9 +61,16 @@ export const CreateTaskScreen = () => {
             style={styles.createTaskInput}
             placeholder="Task Name"
             placeholderTextColor={"#64ED72"}
+            onChangeText={(val) => setTaskName(val)}
+            value={taskName}
           ></TextInput>
-          <TouchableOpacity style={styles.createTaskBtn}>
-            <Text style={styles.createTaskText}>Create</Text>
+          <TouchableOpacity
+            style={styles.createTaskBtn}
+            onPress={handleTaskCreate}
+          >
+            <Text style={styles.createTaskText}>
+              {creating ? "Creating..." : "Create"}
+            </Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </SafeAreaView>

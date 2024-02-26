@@ -75,6 +75,6 @@ const styles = StyleSheet.create({
   signoutText: {
     color: "white",
     fontFamily: "JotiOne",
-    fontSize: "24",
+    fontSize: 24,
   },
 });
