@@ -1,10 +1,11 @@
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { WelcomeScreen } from "./src/screens/WelcomeScreen/WelcomeScreen";
-import { LoginScreen } from "./src/screens/LoginScreen/LoginScreen";
-import { SignupScreen } from "./src/screens/SignupScreen/SignupScreen";
-import { HomeScreen } from "./src/screens/HomeScreen/HomeScreen";
+import { WelcomeScreen } from "./src/screens/WelcomeScreen/WelcomeScreen.jsx";
+import { LoginScreen } from "./src/screens/LoginScreen/LoginScreen.jsx";
+import { SignupScreen } from "./src/screens/SignupScreen/SignupScreen.jsx";
+import { HomeScreen } from "./src/screens/HomeScreen/HomeScreen.jsx";
+import { MainNavigator } from "./src/MainNavigator.jsx";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,8 +38,8 @@ export default function App() {
         />
         <Stack.Screen
           options={{ headerShown: false, gestureEnabled: false }}
-          name="Home"
-          component={HomeScreen}
+          name="Main"
+          component={MainNavigator}
         />
       </Stack.Navigator>
     </NavigationContainer>

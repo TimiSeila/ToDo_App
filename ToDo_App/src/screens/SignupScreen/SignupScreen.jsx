@@ -34,9 +34,12 @@ export const SignupScreen = () => {
       await updateProfile(auth.currentUser, {
         displayName: fullName,
       });
-      navigation.navigate("Home");
+      navigation.navigate("Main");
     } catch (err) {
+      setRegistering(false);
       console.error(err);
+    } finally {
+      setRegistering(false);
     }
   };
 

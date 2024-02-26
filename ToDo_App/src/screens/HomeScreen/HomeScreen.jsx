@@ -4,28 +4,29 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
-import { auth } from "../../../config/firebase";
-import { signOut } from "firebase/auth";
-import { useNavigation } from "@react-navigation/native";
+import { TaskCard } from "../../components/TaskCard";
 
 export const HomeScreen = () => {
-  const navigation = useNavigation();
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerLogo}>ToDo</Text>
       </View>
-      <Text>Hello {auth.currentUser.displayName}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          signOut(auth);
-          navigation.navigate("Welcome");
-        }}
-      >
-        <Text>Sign Out</Text>
-      </TouchableOpacity>
+      <ScrollView style={styles.taskCardListContainer}>
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+        <TaskCard />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -33,7 +34,6 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: "100%",
     width: "100%",
     backgroundColor: "#192B37",
     alignItems: "center",
@@ -49,5 +49,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 40,
     fontFamily: "JotiOne",
+  },
+  taskCardListContainer: {
+    width: "100%",
   },
 });

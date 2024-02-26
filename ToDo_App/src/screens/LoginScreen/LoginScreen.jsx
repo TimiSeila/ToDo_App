@@ -27,9 +27,19 @@ export const LoginScreen = () => {
       Keyboard.dismiss();
       setLogging(true);
       await signInWithEmailAndPassword(auth, email, password);
-      navigation.navigate("Home");
+      navigation.navigate("Main");
     } catch (err) {
-      console.error(err);
+      setLogging(false);
+      switch (err.code) {
+        case "auth/invalid-email":
+          console.log("Invalid Email");
+          break;
+        case "auth/invalid-credential":
+          console.log("Email or password is incorrect");
+          break;
+      }
+    } finally {
+      setLogging(false);
     }
   };
 
